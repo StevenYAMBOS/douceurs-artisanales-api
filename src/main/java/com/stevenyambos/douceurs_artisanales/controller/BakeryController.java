@@ -64,7 +64,7 @@ public class BakeryController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/get-published")
+    @GetMapping("/published")
     public ResponseEntity<List<BakeryModel>> findByPublished() {
         List<BakeryModel> publishedBakeries = bakeryService.findByPublished();
         return new ResponseEntity<>(publishedBakeries, HttpStatus.OK);
