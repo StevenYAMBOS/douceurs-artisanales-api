@@ -36,9 +36,7 @@ public class UserModel implements UserDetails {
     @NotBlank(message = "L'image de profile est obligatoire.")
     private String profilePicture;
 
-
     private String[] Comments = {};
-
 
     private Boolean isOwner = false;
 

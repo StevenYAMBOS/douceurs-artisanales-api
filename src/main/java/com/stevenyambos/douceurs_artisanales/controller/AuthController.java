@@ -50,11 +50,4 @@ public class AuthController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
-
-//    @GetMapping("/user")
-//    @PreAuthorize("hasRole('USER')")
-//    public ResponseEntity<UserModel> getUser(@RequestParam String email) {
-//        UserModel user = userService.getUserByEmail(email);
-//        return new ResponseEntity<>(user, HttpStatus.OK);
-//    }
 }

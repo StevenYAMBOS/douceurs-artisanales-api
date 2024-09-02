@@ -9,9 +9,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 public class DouceursArtisanalesApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DouceursArtisanalesApplication.class, args);
-
 		System.out.println("Lancement de l'application à l'adresse : http://localhost:8080/");
 	}
-
-
 }
