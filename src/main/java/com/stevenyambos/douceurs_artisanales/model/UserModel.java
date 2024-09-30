@@ -7,6 +7,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -17,6 +18,13 @@ import java.util.Date;
 @AllArgsConstructor
 @Document(collection = "user")
 public class UserModel implements UserDetails {
+
+    public enum Role {
+        USER, OWNER, ADMIN;
+    }
+
+    private Role role = Role.USER;
+
     @Id
     private String id;
 
@@ -33,8 +41,8 @@ public class UserModel implements UserDetails {
     @Email(message = "Le format de l'adresse Email n'est pas valide.")
     private String email;
 
-    @NotBlank(message = "L'image de profile est obligatoire.")
-    private String profilePicture;
+//    @NotBlank(message = "L'image de profile est obligatoire.")
+    private String profilePicture = "";
 
     private String[] Comments = {};
 
@@ -50,9 +58,8 @@ public class UserModel implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.EMPTY_LIST;
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
     }
-
     @Override
     public String getUsername() {
         return "";
@@ -72,4 +79,5 @@ public class UserModel implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

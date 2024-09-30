@@ -33,6 +33,16 @@ public class BakeryService {
         return bakeryRepository.findById(id).get();
     }
 
+    public List<BakeryModel> getBakeriesByZipCode(Integer zipCode) {
+        return bakeryRepository.findByZipCode(zipCode);
+    }
+
+    public Long getBakeryCountByZipCode(Integer zipCode) {
+        // Appelle le repository pour compter les boulangeries avec le zipCode
+        return bakeryRepository.countByZipCode(zipCode);
+    }
+
+
     // Mettre à jour une enseigne
     public BakeryModel updateBakery(String id, BakeryModel bakery) {
         if (bakeryRepository.existsById(id)) {

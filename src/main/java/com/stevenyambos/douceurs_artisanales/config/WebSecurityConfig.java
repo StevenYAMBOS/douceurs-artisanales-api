@@ -44,6 +44,8 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/register", "/auth/login").permitAll()
+                        // Autoriser les ADMINs et OWNERS à créer des boulangeries
+                        .requestMatchers("/bakery/create").hasAnyRole("OWNER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -52,9 +54,10 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+    // Actuellement il faut être connecté pour faire des requêtes sauf pour les route "/auth/register" et "/auth/login", la logique ci-dessous permet d'accéder à des routes sans être connecté
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/ignore1", "/ignore2"); // Exemple, personnalisez si nécessaire
+        return (web) -> web.ignoring().requestMatchers("/", "/bakery/get-all", "/bakery/{id}", "/bakery/get-bakeries-by-zip-code", "/bakery/get-bakeries-count-by-zip-code"); // Exemple, personnalisez si nécessaire
     }
 
     @Bean

@@ -31,6 +31,13 @@ public class AuthController {
     public ResponseEntity<UserModel> register(@Valid @RequestBody UserModel user) {
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
+
+        if (user.getIsOwner()) {
+            user.setRole(UserModel.Role.OWNER);
+        } else {
+            user.setRole(UserModel.Role.USER);
+        }
+
         UserModel createdUser = userService.registerUser(user);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
@@ -45,6 +52,7 @@ public class AuthController {
             String token = jwtService.generateToken(user);
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
+            user.setUpdatedAt(new Date());
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

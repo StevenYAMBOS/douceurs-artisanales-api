@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/user")
@@ -20,15 +22,21 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UserModel>> getAllUsers() {
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    }
+
     // Récupérer les informations de l'utilisateur connecté
+    @PreAuthorize("hasAnyRole('ADMIN', 'OWNER', 'USER')")
     @GetMapping("/profile")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserModel> getUser(@RequestParam String email) {
         UserModel user = userService.getUserByEmail(email);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     // Mettre le profile
+    @PreAuthorize("hasAnyRole('ADMIN', 'OWNER', 'USER')")
     @PutMapping("/update/{id}")
     public ResponseEntity<UserModel> updateProfile(@PathVariable("id") String id, @RequestBody UserModel user) {
         UserModel updatedUser = userService.updateUser(id, user);
@@ -36,6 +44,7 @@ public class UserController {
     }
 
     // Supprimer le compte
+    @PreAuthorize("hasAnyRole('ADMIN', 'OWNER', 'USER')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<HttpStatus> deleteAccount(@PathVariable("id") String id) {
         userService.deleteAccount(id);
