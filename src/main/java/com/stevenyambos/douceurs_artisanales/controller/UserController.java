@@ -1,6 +1,7 @@
 package com.stevenyambos.douceurs_artisanales.controller;
 
 import com.stevenyambos.douceurs_artisanales.model.UserModel;
+import com.stevenyambos.douceurs_artisanales.repository.UserRepository;
 import com.stevenyambos.douceurs_artisanales.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,10 +17,12 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -46,9 +49,25 @@ public class UserController {
     // Supprimer le compte
     @PreAuthorize("hasAnyRole('ADMIN', 'OWNER', 'USER')")
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<HttpStatus> deleteAccount(@PathVariable("id") String id) {
-        userService.deleteAccount(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+    public ResponseEntity<?> deleteAccount(@PathVariable("id") String id) {
+        try {
+            // Vérifier si l'utilisateur existe avant de le supprimer
+            if (!userRepository.existsById(id)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Le compte avec l'ID " + id + " n'existe pas.");
+            }
 
+            // Supprimer le compte
+            boolean isDeleted = userService.deleteAccount(id);
+
+            if (!isDeleted) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Échec de la suppression du compte.");
+            }
+
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Compte supprimé avec succès.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Une erreur est survenue lors de la suppression du compte.");
+        }
+    }
 }

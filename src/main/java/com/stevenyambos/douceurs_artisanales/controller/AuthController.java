@@ -1,6 +1,7 @@
 package com.stevenyambos.douceurs_artisanales.controller;
 
 import com.stevenyambos.douceurs_artisanales.model.UserModel;
+import com.stevenyambos.douceurs_artisanales.repository.UserRepository;
 import com.stevenyambos.douceurs_artisanales.service.UserService;
 import com.stevenyambos.douceurs_artisanales.service.JwtService;
 import jakarta.validation.Valid;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 //import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.Date;
@@ -18,6 +20,9 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
 
+    @Autowired
+    UserRepository userRepository;
+
     private final UserService userService;
     private final JwtService jwtService;
 
@@ -27,10 +32,17 @@ public class AuthController {
         this.jwtService = jwtService;
     }
 
+//    S'inscrire
     @PostMapping("/register")
-    public ResponseEntity<UserModel> register(@Valid @RequestBody UserModel user) {
+    public ResponseEntity<?> register(@Valid @RequestBody UserModel user) {
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
+
+        if (userRepository.existsByEmail(user.getEmail())) {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED)
+                    .badRequest()
+                    .body("Erreur: Cette adresse email est déjà utilisée !");
+        }
 
         if (user.getIsOwner()) {
             user.setRole(UserModel.Role.OWNER);
@@ -39,9 +51,10 @@ public class AuthController {
         }
 
         UserModel createdUser = userService.registerUser(user);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
+//    Se connecter
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> credentials) {
         String email = credentials.get("email");

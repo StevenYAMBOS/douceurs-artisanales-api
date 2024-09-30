@@ -42,6 +42,14 @@ public class UserService {
         return null;
     }
 
+    public UserModel findByEmail(String email){
+        return userRepository.findByEmail(email);
+    }
+
+    public boolean emailAlreadyExist(String email){
+        return userRepository.existsByEmail(email);
+    }
+
     public UserModel getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
@@ -58,7 +66,18 @@ public class UserService {
     }
 
     // Supprimer le compte
-    public void deleteAccount(String id) {
-        userRepository.deleteById(id);
+    public boolean deleteAccount(String id) {
+        try {
+            if (userRepository.existsById(id)) {
+                userRepository.deleteById(id);
+                return true; // Suppression réussie
+            } else {
+                return false; // L'utilisateur n'existe pas
+            }
+        } catch (Exception e) {
+            // Gérer les erreurs potentielles
+            return false;
+        }
     }
+
 }
