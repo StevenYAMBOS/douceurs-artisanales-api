@@ -48,7 +48,7 @@ OU
 
 ## Liens utiles
 
-- [Dépôt Front-End]()
+- [Dépôt Front-End](https://github.com/StevenYAMBOS/douceurs-artisanales-app)
 - [Documentation]()
 - [Site Internet]()
 
@@ -60,6 +60,5 @@ OU
 ## License
 
 [MIT](https://youtu.be/FXs8e4vHo6c)
-
 
 À bientôt sur [DouceursArtisanales.fr](https://DouceursArtisanales.fr) ! 🍰✨

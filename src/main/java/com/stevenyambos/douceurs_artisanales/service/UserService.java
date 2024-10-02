@@ -28,7 +28,6 @@ public class UserService {
 
     // S'inscrire
     public UserModel registerUser(UserModel user) {
-        user.setIsSuperuser(false);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }

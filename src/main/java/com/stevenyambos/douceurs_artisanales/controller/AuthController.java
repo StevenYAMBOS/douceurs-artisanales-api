@@ -39,8 +39,7 @@ public class AuthController {
         user.setUpdatedAt(new Date());
 
         if (userRepository.existsByEmail(user.getEmail())) {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED)
-                    .badRequest()
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Erreur: Cette adresse email est déjà utilisée !");
         }
 
@@ -56,19 +55,23 @@ public class AuthController {
 
 //    Se connecter
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> credentials) {
+    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
         String email = credentials.get("email");
         String password = credentials.get("password");
         UserModel user = userService.authenticate(email, password);
 
         if (user != null) {
             String token = jwtService.generateToken(user);
-            Map<String, String> response = new HashMap<>();
+            Map<String, Object> response = new HashMap<>();
             response.put("token", token);
-            user.setUpdatedAt(new Date());
+            response.put("user", user);
+
+            user.setLastLogin(new Date());
+            System.out.println(response);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Adresse email ou mot de passe incorrect");
         }
     }
 }

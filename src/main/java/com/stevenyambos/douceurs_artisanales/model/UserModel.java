@@ -48,8 +48,6 @@ public class UserModel implements UserDetails {
 
     private Boolean isOwner = false;
 
-    private Boolean isSuperuser = false;
-
     private Date createdAt;
 
     private Date updatedAt;
