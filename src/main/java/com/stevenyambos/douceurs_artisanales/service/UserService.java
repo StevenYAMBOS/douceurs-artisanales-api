@@ -21,7 +21,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Récupérer toutes les enseignes
+    // Récupérer toutes les utilisateurs
     public List<UserModel> getAllUsers() {
         return userRepository.findAll();
     }
@@ -41,14 +41,17 @@ public class UserService {
         return null;
     }
 
+    // Trouver un Email
     public UserModel findByEmail(String email){
         return userRepository.findByEmail(email);
     }
 
+    // L'email existe déjà
     public boolean emailAlreadyExist(String email){
         return userRepository.existsByEmail(email);
     }
 
+    // Récupérer un utilisateur
     public UserModel getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
@@ -56,6 +59,18 @@ public class UserService {
     // Mettre à jour le profile
     public UserModel updateUser(String id, UserModel user) {
         if (userRepository.existsById(id)) {
+            user.setId(id);
+            user.setUpdatedAt(new Date());
+            return userRepository.save(user);
+        } else {
+            throw new IllegalArgumentException("L'utilisateur n'a pas été trouvé.");
+        }
+    }
+
+    // J'aime
+    public UserModel favorite(String id, UserModel user) {
+        if (userRepository.existsById(id)) {
+
             user.setId(id);
             user.setUpdatedAt(new Date());
             return userRepository.save(user);

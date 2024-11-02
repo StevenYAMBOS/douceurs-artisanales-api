@@ -1,5 +1,6 @@
 package com.stevenyambos.douceurs_artisanales.controller;
 
+import com.stevenyambos.douceurs_artisanales.dto.AddToFavoritesRequest;
 import com.stevenyambos.douceurs_artisanales.model.BakeryModel;
 import com.stevenyambos.douceurs_artisanales.model.UserModel;
 import com.stevenyambos.douceurs_artisanales.service.BakeryService;
@@ -12,10 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 //@CrossOrigin(origins = "http://localhost:8080")
 @RestController
@@ -86,6 +84,7 @@ public class BakeryController {
             Calendar calendar = Calendar.getInstance();
             String weekOfYear = calendar.get(Calendar.YEAR) + "-W" + calendar.get(Calendar.WEEK_OF_YEAR);
             String monthOfYear = new SimpleDateFormat("yyyy-MM").format(new Date());
+
             Owners.add(user);
             bakery.setOwners(Owners);
             bakery.setRating(null);
@@ -113,7 +112,7 @@ public class BakeryController {
     }
 
     // Supprimer une boulangerie
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'OWNER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteBakery(@PathVariable("id") String id) {
         bakeryService.deleteBakery(id);

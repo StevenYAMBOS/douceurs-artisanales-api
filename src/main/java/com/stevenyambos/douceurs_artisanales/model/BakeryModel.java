@@ -1,16 +1,15 @@
 package com.stevenyambos.douceurs_artisanales.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -46,9 +45,13 @@ public class BakeryModel {
     private Map<String,Integer> weeklyViews = new HashMap<>();
     private Map<String,Integer> monthlyViews = new HashMap<>();
 
+    // Ajouter aux favoris
+//    @JsonIgnore
+//    @DBRef
+//    private List<UserModel> Likes = new ArrayList<>();
+
     private List<UserModel> Owners;
 //    private Integer uniqueViewsCount;
-//    private List<UserModel> Likes;
     private Integer rating;
     private Float averageRating;
     private String[] Comments;

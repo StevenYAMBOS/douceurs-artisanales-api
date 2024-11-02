@@ -68,7 +68,7 @@ public class BakeryService {
         return bakeryRepository.countByZipCode(zipCode);
     }
 
-    // Mettre à jour une enseigne
+    // Mettre à jour une boulangerie
     public BakeryModel updateBakery(String id, BakeryModel bakery) {
         if (bakeryRepository.existsById(id)) {
             bakery.setId(id);

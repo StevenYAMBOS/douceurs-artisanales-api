@@ -4,15 +4,15 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -44,11 +44,13 @@ public class UserModel implements UserDetails {
 //    @NotBlank(message = "L'image de profile est obligatoire.")
     private String profilePicture = "";
 
+    @DBRef
+    private List<BakeryModel> Likes = new ArrayList<>();
+
 //    private String[] Comments = {};
 
 //    private BakeryModel[] Bakeries = {};
 //
-//    private BakeryModel[] Likes = {};
 
     private Boolean isOwner = false;
 
@@ -62,9 +64,14 @@ public class UserModel implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
     }
+
+    public String getEmail() {
+        return this.email;
+    }
+
     @Override
     public String getUsername() {
-        return "";
+        return this.email;
     }
 
     @Override
