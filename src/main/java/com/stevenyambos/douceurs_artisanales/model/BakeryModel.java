@@ -6,13 +6,17 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
 @Document(collection = "bakery")
 public class BakeryModel {
+
     @Id
     private String id;
 
@@ -35,13 +39,34 @@ public class BakeryModel {
 
     @NotBlank(message = "L'arrondissement est obligatoire.")
     private Integer zipCode;
+
+    // Nombre de vues/visites total
+    private Integer totalViewsCount = 0;
+    private Map<String,Integer> dailyViews = new HashMap<>();
+    private Map<String,Integer> weeklyViews = new HashMap<>();
+    private Map<String,Integer> monthlyViews = new HashMap<>();
+
+    private List<UserModel> Owners;
+//    private Integer uniqueViewsCount;
+//    private List<UserModel> Likes;
     private Integer rating;
-    private String[] comments;
+    private Float averageRating;
+    private String[] Comments;
     private String[] images;
     private Boolean multipleLocations;
     private Boolean published;
-    private List<UserModel> owner;
     private Date createdAt;
     private Date updatedAt;
 
+    public void incrementDailyViews(String date) {
+        dailyViews.put(date, dailyViews.getOrDefault(date, 0) + 1);
+    }
+
+    public void incrementWeeklyViews(String week) {
+        weeklyViews.put(week, weeklyViews.getOrDefault(week, 0) + 1);
+    }
+
+    public void incrementMonthlyViews(String month) {
+        monthlyViews.put(month, monthlyViews.getOrDefault(month, 0) + 1);
+    }
 }

@@ -48,6 +48,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/bakery/create").hasAnyRole("OWNER", "ADMIN")
                         .anyRequest().authenticated()
                 )
+                .logout((logout) -> logout.logoutSuccessUrl("/logout"))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
 

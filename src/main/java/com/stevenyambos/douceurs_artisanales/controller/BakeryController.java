@@ -11,7 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -28,73 +30,29 @@ public class BakeryController {
         this.userService = userService;
     }
 
-    @GetMapping("/get-all")
+    // Récupérer toutes les boulangeries
+    @GetMapping("/bakeries")
     public ResponseEntity<List<BakeryModel>> getAllBakeries() {
         List<BakeryModel> bakeries = bakeryService.getAllBakeries();
         return new ResponseEntity<>(bakeries, HttpStatus.OK);
     }
 
-    @GetMapping("/get-bakeries-by-zip-code")
+    // Récupérer les boulangeries par code postal
+    @GetMapping("/zip-code")
     public ResponseEntity<List<BakeryModel>> getBakeriesByZipCode(@RequestParam Integer zipCode) {
         List<BakeryModel> bakeries = bakeryService.getBakeriesByZipCode(zipCode);
         return new ResponseEntity<>(bakeries, HttpStatus.OK);
     }
 
-    @GetMapping("/get-bakeries-count-by-zip-code")
+    // Nombre de boumangeries par code postal
+    @GetMapping("/zip-code-count")
     public ResponseEntity<Long> getBakeriesCountByZipCode(@RequestParam Integer zipCode) {
         // Utilise la méthode du service pour obtenir le nombre de boulangeries
         Long bakeryCount = bakeryService.getBakeryCountByZipCode(zipCode);
         return new ResponseEntity<>(bakeryCount, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BakeryModel> getBakeryById(@PathVariable String id) {
-        BakeryModel bakery = bakeryService.getBakeryById(id);
-        return new ResponseEntity<>(bakery, HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")  // Autoriser les OWNERS et ADMINs
-    @PostMapping("/create")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BakeryModel> createBakery(@RequestBody BakeryModel bakery) {
-        // Récupérer l'utilisateur authentifié
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserModel user = userService.getUserByEmail(userDetails.getUsername());
-
-        List<UserModel> owner = new ArrayList<>();
-        owner.add(user);
-        bakery.setOwner(owner);
-        bakery.setRating(null);
-        bakery.setComments(new String[0]);
-        bakery.setImages(new String[0]);
-        bakery.setPublished(false);
-        bakery.setCreatedAt(new Date());
-        bakery.setUpdatedAt(new Date());
-        BakeryModel createdBakery = bakeryService.createBakery(bakery);
-        return new ResponseEntity<>(createdBakery, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<BakeryModel> updateBakery(@PathVariable("id") String id, @RequestBody BakeryModel bakery) {
-        BakeryModel updatedBakery = bakeryService.updateBakery(id, bakery);
-        return new ResponseEntity<>(updatedBakery, HttpStatus.OK);
-    }
-
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<HttpStatus> deleteBakery(@PathVariable("id") String id) {
-        bakeryService.deleteBakery(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/delete-all")
-    public ResponseEntity<HttpStatus> deleteAllBakeries() {
-        bakeryService.deleteAllBakeries();
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
+    // Récupérer les boulangeries publiées
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/published")
     public ResponseEntity<List<BakeryModel>> findByPublished() {
@@ -102,5 +60,72 @@ public class BakeryController {
         return new ResponseEntity<>(publishedBakeries, HttpStatus.OK);
     }
 
+    // Récupérer une boulangerie
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getBakeryById(@PathVariable String id) {
+        try {
+            BakeryModel bakery = bakeryService.getBakeryById(id);
+            return ResponseEntity.ok(bakery);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    // Créer une boulangerie
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")  // Autoriser les OWNERS et ADMINs
+    @PostMapping("/bakery")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<?> createBakery(@RequestBody BakeryModel bakery) {
+        try {
+            // Récupérer l'utilisateur authentifié
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel user = userService.getUserByEmail(userDetails.getUsername());
+
+            List<UserModel> Owners = new ArrayList<>();
+            String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            Calendar calendar = Calendar.getInstance();
+            String weekOfYear = calendar.get(Calendar.YEAR) + "-W" + calendar.get(Calendar.WEEK_OF_YEAR);
+            String monthOfYear = new SimpleDateFormat("yyyy-MM").format(new Date());
+            Owners.add(user);
+            bakery.setOwners(Owners);
+            bakery.setRating(null);
+            bakery.setComments(new String[0]);
+            bakery.setImages(new String[0]);
+            bakery.setPublished(false);
+            bakery.setTotalViewsCount(0);
+            bakery.getDailyViews().put(today, 0);
+            bakery.getWeeklyViews().put(weekOfYear, 0);
+            bakery.getMonthlyViews().put(monthOfYear, 0);
+            bakery.setCreatedAt(new Date());
+            bakery.setUpdatedAt(new Date());
+            BakeryModel createdBakery = bakeryService.createBakery(bakery);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdBakery);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // Modifier une boulangerie
+    @PutMapping("/{id}")
+    public ResponseEntity<BakeryModel> updateBakery(@PathVariable("id") String id, @RequestBody BakeryModel bakery) {
+        BakeryModel updatedBakery = bakeryService.updateBakery(id, bakery);
+        return new ResponseEntity<>(updatedBakery, HttpStatus.OK);
+    }
+
+    // Supprimer une boulangerie
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteBakery(@PathVariable("id") String id) {
+        bakeryService.deleteBakery(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // Supprimer toutes les boulangeries
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/bakeries")
+    public ResponseEntity<HttpStatus> deleteAllBakeries() {
+        bakeryService.deleteAllBakeries();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 }

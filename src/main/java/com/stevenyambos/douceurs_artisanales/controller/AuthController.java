@@ -4,10 +4,13 @@ import com.stevenyambos.douceurs_artisanales.model.UserModel;
 import com.stevenyambos.douceurs_artisanales.repository.UserRepository;
 import com.stevenyambos.douceurs_artisanales.service.UserService;
 import com.stevenyambos.douceurs_artisanales.service.JwtService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 //import org.springframework.security.access.prepost.PreAuthorize;
@@ -74,4 +77,12 @@ public class AuthController {
                     .body("Adresse email ou mot de passe incorrect");
         }
     }
+
+    @PostMapping("/logout")
+    public String customLogut(Model models, HttpServletRequest request) throws ServletException
+    {
+        request.logout();
+        return "redirect:/";
+    }
+
 }
