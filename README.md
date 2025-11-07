@@ -1,99 +1,137 @@
+# Douceurs artisanales
+
+Bienvenue sur le dépôt GitHub de l'API **Douceurs Artisanales**, une application permettant de découvrir les délices sucrés proposés par les artisans pâtissiers à Paris, classés par arrondissement.
+
+\
+[![NestJS](https://img.shields.io/badge/NestJS-EA2845?logo=nestjs&logoColor=fff)](#)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](#)
+[![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=fff)](#)
+[![pnpm](https://img.shields.io/badge/pnpm-F69220?logo=pnpm&logoColor=fff)](#)
+[![Jest](https://img.shields.io/badge/Jest-C21325?logo=jest&logoColor=fff)](#)
+[![ESLint](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=fff)](#)
+[![Prettier](https://img.shields.io/badge/Prettier-1A2C34?logo=prettier&logoColor=fff)](#)
+[![Statut licence](https://img.shields.io/badge/Licence-UNLICENSED-808080)](#)
+
+> Les badges sont sélectionnés depuis la collection de références de badges. Voir la section « références ».
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  <img src="https://savourschool.com.au/wp-content/uploads/2023/08/BLOG-IMAGE-Hazelnut-Paris-Brest.jpg" alt="Douceurs artisanales" width="738">
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Aperçu du projet
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- API REST focalisée sur la découverte des pâtisseries par arrondissement
+- Architecture modulaire Nest (modules, contrôleurs, services)
+- Outillage standardisé pour le développement, le test, le lint et le formatage
 
-## Description
+## Fonctionnalités
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Recherche de pâtisseries par arrondissement
+- Authentification pour gérer des favoris et des recommandations
+- Formulaire de contact pour les questions et suggestions
 
-## Project setup
+## Architecture et organisation
 
-```bash
-$ pnpm install
+Arborescence minimale du projet pour repères rapides.
+
+```text
+src/
+  app.controller.ts
+  app.module.ts
+  app.service.ts
+  main.ts
+test/
+  app.e2e-spec.ts
+  jest-e2e.json
 ```
 
-## Compile and run the project
+Principes structurants:
+
+- `app.module.ts`: module racine agrégeant les dépendances applicatives
+- `app.controller.ts`: exposé HTTP (contrats REST)
+- `app.service.ts`: logique de domaine applicative
+- `main.ts`: bootstrap de l'application (initialisation NestFactory)
+
+## Prérequis
+
+- Node.js 18+ recommandé
+- pnpm 8+
+- git
+
+## Installation
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+git clone https://github.com/StevenYAMBOS/douceurs-artisanales-api
+cd douceurs-artisanales-api
+pnpm install
 ```
 
-## Run tests
+## Configuration
+
+Le projet ne requiert pas de configuration externe par défaut. Pour ajouter des variables d'environnement, créez un fichier `.env` à la racine et chargez-les dans `main.ts` ou via le module `@nestjs/config` si vous l'ajoutez au projet.
+
+Exemple minimal de variables d'environnement:
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+PORT=3000
+NODE_ENV=development
 ```
 
-## Deployment
+## Scripts de développement
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Scripts disponibles (extraits de `package.json`).
 
 ```bash
-$ pnpm install -g mau
-$ mau deploy
+pnpm start         # démarrage (mode standard)
+pnpm start:dev     # démarrage en watch
+pnpm start:debug   # démarrage avec debugger
+pnpm build         # build de production (transpile TypeScript -> dist)
+pnpm start:prod    # exécution du build (node dist/main)
+pnpm test          # tests unitaires (jest)
+pnpm test:watch    # tests en watch
+pnpm test:cov      # couverture de test
+pnpm test:e2e      # tests end-to-end
+pnpm lint          # lint (eslint)
+pnpm format        # formatage (prettier)
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Exécution locale
 
-## Resources
+Développement avec rechargement:
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+pnpm start:dev
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Build et exécution de production:
 
-## Support
+```bash
+pnpm build
+pnpm start:prod
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Par défaut, l'application écoute sur le port `3000` et expose un endpoint de santé minimal à la racine (`GET /`).
 
-## Stay in touch
+## Tests et qualité
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Tests unitaires via `jest`
+- Tests e2e via `supertest` et configuration `test/jest-e2e.json`
+- Normes de code via `eslint` et formatage via `prettier`
 
-## License
+## Documentation API
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+La documentation OpenAPI/Swagger n'est pas activée par défaut dans ce dépôt. Pour l'activer, ajoutez `@nestjs/swagger`, configurez l'initialisation dans `main.ts` et exposez l'UI sous `/api`.
+
+## Liens utiles
+
+Dépôt Front-End (pas encore créé) : <https://github.com/StevenYAMBOS/douceurs-artisanales-app>
+
+## Contacts
+
+[![LinkedIn](https://custom-icon-badges.demolab.com/badge/LinkedIn-0A66C2?logo=linkedin-white&logoColor=fff)](https://www.linkedin.com/in/steven-yambos)
+
+[![X](https://img.shields.io/badge/X-%23000000.svg?logo=X&logoColor=white)](https://x.com/StevenYambos)
+
+## Références
+
+Références de badges: <https://github.com/inttter/md-badges>
