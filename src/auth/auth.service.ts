@@ -15,6 +15,7 @@ export class AuthService {
     first_name: string,
     last_name: string,
     email: string,
+    phone: string,
     password: string,
   ) {
     const existingUser = await this.usersService.findByEmail(email);
@@ -27,6 +28,7 @@ export class AuthService {
       first_name,
       last_name,
       email,
+      phone,
       password: hashedPassword,
       role: 'user',
       created_at: new Date(),

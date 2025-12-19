@@ -129,13 +129,9 @@ CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL,
-    phone VARCHAR(15),
+    username VARCHAR(50) NOT NULL,
     role VARCHAR(20) DEFAULT 'user' CHECK (role IN ('user', 'admin')),
-    is_verified BOOLEAN DEFAULT false,
     last_login TIMESTAMP,
-    is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -155,13 +151,9 @@ COMMENT ON COLUMN users.role IS 'Niveau d''autorisation: user ou admin';
 - `id`: Clé primaire UUID v4
 - `email`: Identifiant unique de connexion
 - `password`: Hash sécurisé du mot de passe
-- `first_name`: Prénom de l'utilisateur
-- `last_name`: Nom de famille
-- `phone`: Numéro de contact optionnel
+- `username`: Pseudo de l'utilisateur
 - `role`: Niveau d'autorisation (RBAC)
-- `is_verified`: Statut de validation email
 - `last_login`: Horodatage de dernière session
-- `is_active`: Flag pour désactivation compte
 - `created_at`: Horodatage de création
 - `updated_at`: Horodatage de dernière modification
 

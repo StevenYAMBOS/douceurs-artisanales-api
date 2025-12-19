@@ -2,18 +2,14 @@ import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmConfigService } from '../config/database.service';
+import { User } from 'src/user/user.entity';
+import { UserService } from 'src/user/user.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useClass: TypeOrmConfigService,
-    }),
-  ],
+  imports: [TypeOrmModule.forFeature([User])],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, UserService, JwtService],
+  exports: [AuthService],
 })
 export class AuthModule {}

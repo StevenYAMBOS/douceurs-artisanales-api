@@ -2,18 +2,13 @@ import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmConfigService } from '../config/database.service';
+import { User } from './user.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useClass: TypeOrmConfigService,
-    }),
-  ],
+  imports: [TypeOrmModule.forFeature([User])],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [UserService, JwtService],
+  exports: [UserService, JwtService],
 })
 export class UserModule {}
