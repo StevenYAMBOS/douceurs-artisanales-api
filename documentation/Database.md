@@ -128,7 +128,7 @@ Gestion des comptes utilisateurs avec authentification sécurisée.
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email VARCHAR(100) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     phone VARCHAR(15),
@@ -146,7 +146,7 @@ CREATE INDEX idx_users_role ON users(role);
 
 -- Commentaires
 COMMENT ON TABLE users IS 'Comptes utilisateurs avec gestion des droits';
-COMMENT ON COLUMN users.password_hash IS 'Hash bcrypt du mot de passe (coût 10+)';
+COMMENT ON COLUMN users.password IS 'Hash bcrypt du mot de passe (coût 10+)';
 COMMENT ON COLUMN users.role IS 'Niveau d''autorisation: user ou admin';
 ```
 
@@ -154,7 +154,7 @@ COMMENT ON COLUMN users.role IS 'Niveau d''autorisation: user ou admin';
 
 - `id`: Clé primaire UUID v4
 - `email`: Identifiant unique de connexion
-- `password_hash`: Hash sécurisé du mot de passe
+- `password`: Hash sécurisé du mot de passe
 - `first_name`: Prénom de l'utilisateur
 - `last_name`: Nom de famille
 - `phone`: Numéro de contact optionnel

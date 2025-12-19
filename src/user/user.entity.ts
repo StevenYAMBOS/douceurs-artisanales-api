@@ -15,7 +15,7 @@ export class User {
   last_name: string;
 
   @Column({ length: 255 })
-  password_hash: string;
+  password: string;
 
   @Column({ length: 15 })
   phone: string;
