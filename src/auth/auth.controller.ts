@@ -7,19 +7,11 @@ export class AuthController {
 
   @Post('register')
   async register(
-    @Body('first_name') first_name: string,
-    @Body('last_name') last_name: string,
+    @Body('username') username: string,
     @Body('email') email: string,
-    @Body('phone') phone: string,
     @Body('password') password: string,
   ) {
-    return this.authService.register(
-      first_name,
-      last_name,
-      email,
-      phone,
-      password,
-    );
+    return this.authService.register(username, email, password);
   }
 
   @HttpCode(HttpStatus.OK)

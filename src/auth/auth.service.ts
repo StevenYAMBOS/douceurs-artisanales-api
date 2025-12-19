@@ -11,13 +11,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(
-    first_name: string,
-    last_name: string,
-    email: string,
-    phone: string,
-    password: string,
-  ) {
+  async register(username: string, email: string, password: string) {
     const existingUser = await this.usersService.findByEmail(email);
     if (existingUser) {
       throw new BadRequestException(`L'adresse email est déjà utilisée.`);
@@ -25,12 +19,11 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     return this.usersService.register({
-      first_name,
-      last_name,
+      username,
       email,
-      phone,
       password: hashedPassword,
       role: 'user',
+      last_login: new Date(),
       created_at: new Date(),
       updated_at: new Date(),
     });
