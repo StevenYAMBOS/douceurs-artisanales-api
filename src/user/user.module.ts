@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmConfigService } from './config/database.service';
+import { TypeOrmConfigService } from '../config/database.service';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { TypeOrmConfigService } from './config/database.service';
       useClass: TypeOrmConfigService,
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [UserController],
+  providers: [UserService],
 })
-export class AppModule {}
+export class UserModule {}

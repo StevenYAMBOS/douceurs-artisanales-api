@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { UsersService } from '../user/user.service';
+import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -7,11 +7,16 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersService: UsersService,
+    private readonly usersService: UserService,
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(email: string, password: string) {
+  async register(
+    first_name: string,
+    last_name: string,
+    email: string,
+    password: string,
+  ) {
     const existingUser = await this.usersService.findByEmail(email);
     if (existingUser) {
       throw new BadRequestException(`L'adresse email est déjà utilisée.`);
@@ -19,8 +24,13 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     return this.usersService.register({
+      first_name,
+      last_name,
       email,
       password: hashedPassword,
+      role: 'user',
+      created_at: new Date(),
+      updated_at: new Date(),
     });
   }
 
