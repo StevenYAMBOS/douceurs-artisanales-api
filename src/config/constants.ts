@@ -1,6 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 // ============================================================================
 // BASE DE DONNÉES
 // ============================================================================
@@ -10,12 +7,6 @@ export const DATABASE_USER = process.env.DB_USER;
 export const DATABASE_PORT: number = 5433;
 export const DATABASE_PASSWORD = process.env.DB_PASSWORD;
 export const DATABASE_NAME = process.env.DB_NAME;
-
-// ============================================================================
-// JWT
-// ============================================================================
-
-export const SECRET_KEY = process.env.JWT_SECRET;
 
 // ============================================================================
 // CODES DE STATUT HTTP
@@ -51,11 +42,11 @@ export const HTTP_METHODS = {
 export const AUTH = {
   BEARER_PREFIX: 'Bearer ',
   HEADER_NAME: 'Authorization',
-  // Messages
   INVALID_TOKEN: 'Token de connexion invalide ou expiré',
   UNAUTHORIZED_ACCESS: 'Accès non autorisé à cette ressource',
   MISSING_TOKEN: "Token d'authentification manquant",
   INVALID_CREDENTIALS: 'Email ou mot de passe incorrect',
+  JWT_SECRET_KEY: process.env.JWT_SECRET,
   EXPIRATION_TIME: '1h',
 } as const;
 
@@ -90,8 +81,6 @@ export const VALIDATION = {
   BUSINESS_ID_REQUIRED: "L'identifiant de l'établissement est requis",
   ENTRY_ID_REQUIRED: "L'identifiant de l'entrée est requis",
   NAME_REQUIRED: 'Le nom est requis',
-
-  // Format invalide
   INVALID_PHONE_FORMAT:
     'Le format du numéro de téléphone est invalide (format français attendu: +33 ou 0)',
   INVALID_EMAIL_FORMAT: "Le format de l'adresse email est invalide",
@@ -99,7 +88,6 @@ export const VALIDATION = {
   PASSWORD_TOO_WEAK:
     'Le mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre',
   INVALID_PASSWORD: 'Le mot de passe est incorrect',
-  // Autres
   MIN_LENGTH: "La longueur minimale requise n'est pas atteinte",
   MAX_LENGTH: 'La longueur maximale a été dépassée',
 } as const;
@@ -118,6 +106,8 @@ export const ERROR_MESSAGES = {
   TIMEOUT_ERROR: 'La requête a dépassé le délai imparti',
   METHOD_NOT_ALLOWED: 'Méthode HTTP non autorisée',
   INVALID_EMAIL_OR_PASSWORD: 'Email ou mot de passe invalide',
+  INVALID_EMAIL: 'Email utilisateur invalide',
+  INVALID_PASSWORD: 'Mot de passe invalide',
   GOOGLE_AUTH_FAILED: 'Authentification Google annulée ou échouée',
   INVALID_SESSION: 'État de session invalide (protection CSRF)',
   INVALID_CODE: "Code d'autorisation manquant",
@@ -181,4 +171,5 @@ export const APP_CONFIG = {
   MAX_REQUEST_TIMEOUT_MS: 30000,
   RATE_LIMIT_WINDOW_MS: 900000,
   RATE_LIMIT_MAX_REQUESTS: 100,
+  DATE_NOW: new Date(),
 } as const;

@@ -7,6 +7,7 @@ import { TypeOrmConfigService } from './config/database.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { JwtModule } from '@nestjs/jwt';
+import { AUTH } from './config/constants';
 
 @Module({
   imports: [
@@ -19,8 +20,8 @@ import { JwtModule } from '@nestjs/jwt';
     UserModule,
     JwtModule.register({
       global: true,
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '60s' },
+      secret: AUTH.JWT_SECRET_KEY,
+      signOptions: { expiresIn: AUTH.EXPIRATION_TIME },
     }),
   ],
   controllers: [AppController],
