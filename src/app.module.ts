@@ -7,7 +7,8 @@ import { TypeOrmConfigService } from './config/database.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { JwtModule } from '@nestjs/jwt';
-import { AUTH } from './config/constants';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { APP_CONFIG, AUTH } from './config/constants';
 
 @Module({
   imports: [
@@ -16,11 +17,20 @@ import { AUTH } from './config/constants';
       imports: [ConfigModule],
       useClass: TypeOrmConfigService,
     }),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: APP_CONFIG.RATE_LIMIT_WINDOW_MS,
+          limit: APP_CONFIG.MAX_REQUEST_TIMEOUT_MS,
+        },
+      ],
+    }),
     AuthModule,
     UserModule,
     JwtModule.register({
       global: true,
-      secret: AUTH.JWT_SECRET_KEY,
+      secret: process.env.JWT_SECRET,
+      // secret: AUTH.JWT_SECRET_KEY,
       signOptions: { expiresIn: AUTH.EXPIRATION_TIME },
     }),
   ],
