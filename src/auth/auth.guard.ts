@@ -8,8 +8,7 @@ export class AuthGuard extends PassportStrategy(Strategy) {
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.JWT_SECRET,
-      // secretOrKey: AUTH.JWT_SECRET_KEY,
+      secretOrKey: AUTH.JWT_SECRET_KEY,
     });
   }
 

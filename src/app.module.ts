@@ -12,7 +12,7 @@ import { APP_CONFIG, AUTH } from './config/constants';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ envFilePath: 'env', isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useClass: TypeOrmConfigService,
@@ -29,8 +29,7 @@ import { APP_CONFIG, AUTH } from './config/constants';
     UserModule,
     JwtModule.register({
       global: true,
-      secret: process.env.JWT_SECRET,
-      // secret: AUTH.JWT_SECRET_KEY,
+      secret: AUTH.JWT_SECRET_KEY,
       signOptions: { expiresIn: AUTH.EXPIRATION_TIME },
     }),
   ],
